@@ -1,6 +1,4 @@
-//Scanner.js
-
-import React, { useRef,useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Webcam from 'react-webcam';
 import jsQR from 'jsqr';
@@ -8,33 +6,31 @@ import jsQR from 'jsqr';
 import {
   Layout,
   Typography,
-  Form,
   Input,
   Space,
   Button,
-  Modal,
-  message,
 } from "antd";
 import {
   PlusOutlined,
   StockOutlined,
   SearchOutlined,
-  EditOutlined,
-  DeleteOutlined, 
 } from "@ant-design/icons";
 import LayoutNew from "../Layout";
-
 
 const { Title } = Typography;
 const { Content } = Layout;
 
 const Scanner = () => {
-    const webcamRef = useRef(null);
-    const [scanned, setScanned] = useState(null);
-    const navigate = useNavigate();
- 
-
+  const webcamRef = useRef(null);
+  const [scanned, setScanned] = useState(null);
+  const navigate = useNavigate();
   const [loggedInUserType, setLoggedInUserType] = useState('');
+
+  // Determine if it's a mobile device
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const videoConstraints = {
+    facingMode: isMobile ? 'environment' : 'user'
+  };
 
   useEffect(() => {
     const userType = localStorage.getItem("loggedInUserType");
@@ -44,22 +40,26 @@ const Scanner = () => {
   }, []);
 
   const handleScan = () => {
-    const video = webcamRef.current.video;
+    const video = webcamRef.current?.video;
+    if (!video || video.readyState !== 4) {
+      alert('Camera not ready. Please wait a moment and try again.');
+      return;
+    }
+
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const context = canvas.getContext('2d');
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    
+
     const code = jsQR(imageData.data, imageData.width, imageData.height, {
       inversionAttempts: 'dontInvert',
     });
-  
+
     if (code) {
       setScanned(code.data);
       navigate(`/details/${code.data}`);
-
     } else {
       alert('No QR code found');
     }
@@ -69,8 +69,7 @@ const Scanner = () => {
     <LayoutNew userType={loggedInUserType}>
       <Layout>
         <Content style={{ padding: "24px" }}>
-
-          {/* Style for page header */}
+          {/* Page header */}
           <Space
             style={{
               background: "#001529",
@@ -81,75 +80,53 @@ const Scanner = () => {
               display: "flex",
             }}
           >
-            {/*page header start */}
             <Space>
               <StockOutlined style={{ fontSize: "24px", marginRight: "8px" }} />
-              <Title
-                level={2}
-                style={{ fontSize: "24px", marginTop: "8px", color: "white" }}
-              >
-                QR code generator
+              <Title level={2} style={{ fontSize: "24px", margin: 0, color: "white" }}>
+                QR Code Scanner
               </Title>
             </Space>
             <div style={{ marginLeft: "auto", marginRight: "20px" }}>
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={''}
-              >
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => {}}>
                 Add New Supplier
               </Button>
             </div>
           </Space>
-          {/* end*/}
-          
-          <br />
-          <br />
-          <div
-            style={{
-              marginBottom: "16px",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            {/* Search input */}
+
+          <br /><br />
+
+          <div style={{ display: "flex", alignItems: "center", marginBottom: "16px" }}>
             <Input
               placeholder="Search..."
               prefix={<SearchOutlined />}
-              onChange={''}
+              onChange={() => {}}
               style={{ marginRight: "8px" }}
             />
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
-      <Webcam
-           audio={false}
-           height={320}
-           ref={webcamRef}
-           screenshotFormat="image/jpeg"
-           width={500}
-           videoConstraints={{
-                facingMode: 'environment',
-           }}
-       />
 
-<div style={{ marginLeft: "540px", marginRight: "auto", marginTop:"20px" }}>
-              <Button
-                type="primary"
-                onClick={handleScan}
-              >
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '60vh'
+          }}>
+            <Webcam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              width={500}
+              height={320}
+              videoConstraints={videoConstraints}
+            />
+            <div style={{ marginTop: "20px" }}>
+              <Button type="primary" onClick={handleScan}>
                 Scan
               </Button>
             </div>
-            <br></br>
-  {scanned && <p>Scanned: {scanned}</p>}
-</div>
-
-
-
-
-
-
-
+            <br />
+            {scanned && <p>Scanned: {scanned}</p>}
+          </div>
         </Content>
       </Layout>
     </LayoutNew>

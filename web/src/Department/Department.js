@@ -144,6 +144,7 @@ const DepartmentManagementPage = () => {
             onClick={() => confirmDelete(params.row.id)}
             icon={<DeleteOutlined style={{ color: "red" }} />}
           />
+          
         </div>
       ),
     },
