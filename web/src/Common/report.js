@@ -6,7 +6,7 @@ export const exportToPDF = (columns, data, options = {}) => {
   const doc = new jsPDF();
   const { title } = options;
   const logo = new Image();
-  logo.src = imageSrc;
+  logo.src = imageSrc; //imagee
   logo.onload = () => {
     const logoWidth = 40;
     const pageWidth = doc.internal.pageSize.getWidth();
