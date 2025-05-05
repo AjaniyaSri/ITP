@@ -37,7 +37,15 @@ const RoomForm = ({ form, onFinish }) => {
           <Form.Item
             name="price"
             label="Price"
-            rules={[{ required: true, message: "Please input price!" }]}
+            rules={[
+              { required: true, message: "Price is required" },
+              {
+                validator: (_, value) =>
+                  value >= 0
+                    ? Promise.resolve()
+                    : Promise.reject(new Error("Price must be a positive number")),
+              },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -46,7 +54,14 @@ const RoomForm = ({ form, onFinish }) => {
           <Form.Item
             name="capacity"
             label="Capacity"
-            rules={[{ required: true, message: "Please input capacity!" }]}
+            rules={[{ required: true, message: "Please input capacity!" },
+              {
+                validator: (_, value) =>
+                  value >= 0
+                    ? Promise.resolve()
+                    : Promise.reject(new Error("Capacity must be a positive number")),
+              },
+            ]}
           >
             <Input />
           </Form.Item>

@@ -73,8 +73,10 @@ const StockForm = ({ form, onFinish }) => {
               { required: true, message: "Please input price!" },
               {
                 pattern: /^\d+(\.\d{1,2})?$/,
-                message: "cents must be included",
+                message: "Must be Positive",
+                
               },
+              
             ]}
           >
             <Input onChange={(e) => handlePriceChange(e.target.value)} />
@@ -84,7 +86,15 @@ const StockForm = ({ form, onFinish }) => {
           <Form.Item
             name="quantity"
             label="Quantity"
-            rules={[{ required: true, message: "Please input quantity!" }]}
+            rules={[
+              { required: true, message: "Quantity is required" },
+              {
+                validator: (_, value) =>
+                  value >= 0
+                    ? Promise.resolve()
+                    : Promise.reject(new Error("Quantity must be a positive number")),
+              },
+            ]}
           >
             <Input onChange={(e) => handleQuantityChange(e.target.value)} />
           </Form.Item>
