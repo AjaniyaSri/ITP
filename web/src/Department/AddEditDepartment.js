@@ -14,6 +14,7 @@ const DepartmentForm = ({ form, onFinish }) => {
             <Input />
           </Form.Item>
         </Col>
+        
         <Col span={8}>
           <Form.Item
             name="description"

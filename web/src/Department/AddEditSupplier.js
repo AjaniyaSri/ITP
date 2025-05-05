@@ -31,7 +31,16 @@ const SupplierForm = ({ form, onFinish }) => {
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item name="address" label="Address">
+          <Form.Item name="address" label="Address"   rules={[
+    { required: true, message: "Please enter your address!" },
+    { min: 10, message: "Address must be at least 10 characters!" },
+    { max: 100, message: "Address cannot exceed 100 characters!" },
+    {
+      pattern: /^[a-zA-Z0-9\s,.'-]{10,100}$/,
+      message: "Please enter a valid address!",
+    },
+  ]}
+>
             <Input.TextArea />
           </Form.Item>
         </Col>

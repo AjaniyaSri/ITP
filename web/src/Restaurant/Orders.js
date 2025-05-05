@@ -93,7 +93,7 @@ const OrdersPage = () => {
       width: 150,
       renderCell: (params) => (
         <div>
-         
+          {params.row.status === "Pending" && (
             <>
               <Button
                 onClick={() => confirmOrder(params.row.id)}
@@ -108,7 +108,7 @@ const OrdersPage = () => {
                 icon={<DeleteOutlined style={{ color: "red" }} />}
               />
             </>
-          
+          )}
         </div>
       ),
     },

@@ -15,7 +15,7 @@ const StockForm = ({ form, onFinish }) => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_BASE_URL}/departments`
-      );
+ );
       setDepartments(response.data.data);
     } catch (error) {
       console.error("Error fetching departments:", error);
@@ -90,11 +90,11 @@ const StockForm = ({ form, onFinish }) => {
           </Form.Item>
         </Col>
 
-        <Col span={8}>
+        {/* <Col span={8}>
           <Form.Item name="unit" label="Unit">
             <Input />
           </Form.Item>
-        </Col>
+        </Col> */}
 
         <Col span={8}>
           <Form.Item
@@ -112,3 +112,4 @@ const StockForm = ({ form, onFinish }) => {
 };
 
 export default StockForm;
+
