@@ -63,6 +63,15 @@ const DriverForm = ({ form, onFinish }) => {
             <Input />
           </Form.Item>
         </Col>
+        {/* <Col span={8}>
+          <Form.Item
+            name="area"
+            label="Area"
+            rules={[{ required: true, message: "Please input city!" }]}
+          >
+            <Input />
+          </Form.Item>
+        </Col> */}
         <Col span={8}>
           <Form.Item
             name="state"
