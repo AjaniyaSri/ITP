@@ -153,6 +153,7 @@ const DriverManagementPage = () => {
     { field: "address", headerName: "Address", width: 200 },
     { field: "city", headerName: "City", width: 120 },
     { field: "state", headerName: "State", width: 120 },
+    //{ field: "area", headerName: "Arera", width: 120 },
     { field: "country", headerName: "Country", width: 120 },
     { field: "zipCode", headerName: "Zip Code", width: 120 },
     { field: "drivingLicenseNo", headerName: "Driving License No", width: 200 },

@@ -26,6 +26,11 @@ const driverSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+//  area
+//   :{
+//  type:String,
+//  required:true,
+//   },
   state: {
     type: String,
     required: true,
