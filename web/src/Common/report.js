@@ -1,4 +1,4 @@
-import imageSrc from "./logocopy.png";
+import imageSrc from "./vadali.png";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 

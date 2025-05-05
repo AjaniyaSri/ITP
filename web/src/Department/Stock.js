@@ -70,7 +70,11 @@ const StockManagementPage = () => {
       );
       const idMatch = row._id.toLowerCase().includes(searchQuery.toLowerCase()); // Include searching by _id
 
-      const depMatch = row.department.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const depMatch =
+      row.department &&
+      row.department.name &&
+      row.department.name.toLowerCase().includes(searchQuery.toLowerCase());
+
   
       return orderAttributesMatch || depMatch || idMatch;
     });
@@ -192,12 +196,12 @@ const StockManagementPage = () => {
       headerName: "Department",
       width: 150,
       renderCell: (params) => {
-        return params.value.name;
+        return params.value?.name || "Unknown Department";
       },
-    },
+    },    
     { field: "name", headerName: "Name", width: 100 },
     { field: "description", headerName: "Description", width: 150 },
-    { field: "unit", headerName: "Unit", width: 100 },
+    // { field: "unit", headerName: "Unit", width: 100 },
     {
       field: "price",
       headerName: "Price",
