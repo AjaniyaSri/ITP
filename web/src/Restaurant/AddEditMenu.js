@@ -49,6 +49,15 @@ const MenuForm = ({ form, onFinish }) => {
           <Form.Item
             name="price"
             label="Price"
+            rules={[
+              { required: true, message: "Price is required" },
+              {
+                validator: (_, value) =>
+                  value >= 0
+                    ? Promise.resolve()
+                    : Promise.reject(new Error("Price must be a positive number")),
+              },
+            ]}
           >
             <Input />
           </Form.Item>
