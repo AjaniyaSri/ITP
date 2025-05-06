@@ -27,62 +27,6 @@ const Dashboard = () => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [leaveData, setLeaveData] = useState([]);
   const [data, setData] = useState([]);
-
-  // Add state for chart data
-  const [orderSeriesData, setOrderSeriesData] = useState([]);
-  const [paymentSeriesData, setPaymentSeriesData] = useState([]);
-
-  // Add options for scatter chart
-  const options = {
-    chart: {
-      height: 350,
-      type: 'scatter',
-      zoom: {
-        enabled: true,
-        type: 'xy'
-      }
-    },
-    xaxis: {
-      tickAmount: 10,
-    },
-    yaxis: {
-      tickAmount: 7
-    }
-  };
-
-  const series = [
-    {
-      name: "Attendance",
-      data: attendanceData.map(item => ({
-        x: moment(item.date).format('YYYY-MM-DD'),
-        y: item.hours
-      }))
-    }
-  ];
-
-  const splineChartOptions = {
-    chart: {
-      type: 'area',
-      height: 350,
-      stacked: false,
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: 'smooth'
-    },
-    xaxis: {
-      type: 'datetime',
-      categories: orderData.map(order => moment(order.date).format('YYYY-MM-DD'))
-    },
-    tooltip: {
-      x: {
-        format: 'dd/MM/yy HH:mm'
-      },
-    },
-  };
-
   useEffect(() => {
     const userType = localStorage.getItem("loggedInUserType");
     if (userType) {
@@ -402,18 +346,56 @@ const bubleoptions = {
         `${process.env.REACT_APP_BACKEND_BASE_URL}/orders`
       );
       setOrderData(orderResponse.data.data);
-      setOrderSeriesData(orderResponse.data.data.map(order => order.totalAmount));
 
       const paymentResponse = await axios.get(
         `${process.env.REACT_APP_BACKEND_BASE_URL}/payments`
       );
       setPaymentData(paymentResponse.data.data);
-      setPaymentSeriesData(paymentResponse.data.data.map(payment => payment.amount));
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
+  // Extracting data for orders series
+  const orderSeriesData = orderData.map((order) => ({
+    x: new Date(order.createdAt).getTime(),
+    y: order.totalPrice, // You can customize the value as per your requirement
+  }));
+
+  // Extracting data for payments series
+  const paymentSeriesData = paymentData.map((payment) => ({
+    x: new Date(payment.paidOn).getTime(),
+    y: payment.totalPrice, // You can customize the value as per your requirement
+  }));
+
+  const splineChartOptions = {
+    chart: {
+      type: "area",
+      height: 350,
+    },
+    xaxis: {
+      type: "datetime",
+      labels: {
+        formatter: function (val) {
+          return new Date(val).toLocaleDateString(); // Format date
+        },
+      },
+    },
+    yaxis: {
+      title: {
+        text: "Amount gain by Orders/Booking",
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: "smooth",
+    },
+    legend: {
+      position: "top",
+    },
+  };
   return (
     <Layout userType={loggedInUserType}>
       {loggedInUserType === "admin" ? (
@@ -450,7 +432,7 @@ const bubleoptions = {
               <Link to="/transports">
                 <CardView
                   title="Transport"
-                  description={`Total Transport: ${travelsCount}`}
+                  description={`Total Menu: ${travelsCount}`}
                   icon={<CarOutlined />}
                 />
               </Link>
