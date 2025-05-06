@@ -109,9 +109,9 @@ const Login = () => {
           const authToken = response.data.token;
           const loggedInUser = response.data.data;
           console.log(loggedInUser);
-          const userId =loggedInUser._id;
-          const empid=loggedInUser.employee;
-          const data=loggedInUser;
+          const userId = loggedInUser._id;
+          const empid = loggedInUser.employee;
+          const data = loggedInUser;
           console.log(data);
           localStorage.setItem("authToken", authToken);
           localStorage.setItem("loggedInUserType", loggedInUser.userType);
@@ -123,10 +123,24 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Login failed:", error);
+      let errorMessage = "Login failed. Please try again.";
+      
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        errorMessage = error.response.data.message || errorMessage;
+      } else if (error.request) {
+        // The request was made but no response was received
+        errorMessage = "No response from server. Please check your connection.";
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        errorMessage = error.message || errorMessage;
+      }
+
       Swal.fire({
         icon: "error",
         title: "Login Failed",
-        text: error.response.data.message,
+        text: errorMessage,
       }).then(() => {
         setUsername("");
         setPassword("");
